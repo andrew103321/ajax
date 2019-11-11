@@ -12,12 +12,50 @@
     src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
     crossorigin="anonymous">
-</script>
-
-
+  </script>
+    <style>
+       table{
+         border-collapse: collapse;
+       }
+       td{
+         border: 1px solid rgb(75, 74, 67);
+         padding:5px;
+       }
+    </style>
+ 
 </head>
 <body>
   <h1 class="header">學生資料管理系統</h1>
+  <button>新增學生資料</button><br>
+  <select name="class" id="class">
+    <option value="1">一年一班</option>
+    <option value="2">一年二班</option>
+    <option value="3">一年三班</option>
+    <option value="4">一年四班</option>
+    <option value="5">一年五班</option>
+    <option value="6">一年六班</option>
+    <option value="7">一年七班</option>
+    <option value="8">一年八班</option>
+    <option value="9">一年九班</option>
+    <option value="10">一年十班</option>
+  </select>
+  <table >
+    <tr>
+      <td>座號</td>
+      <td>姓名</td>
+      <td>科系</td>
+      <td>生日</td>
+      <td>學號</td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+  </table>
+
 
   
 </body>
@@ -34,12 +72,24 @@
 
 //新增資料的函式
 function create(){
+  
 
 }
+// 呼叫一班
+query('2');
 
-//查詢資料的函式
-function query(){
+// 將選擇的值給c1
+$("#class").on("change",function(){
+  let cl=$(this).val()
+  query(cl)
+})
 
+//查詢資料的函
+function query(cl){
+  $.get("./api/query.php",{"class":cl},function(res){
+    console.log(res)
+    $("table").html(res)
+  })
 }
 
 //編輯資料的函式
