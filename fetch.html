@@ -24,10 +24,48 @@
     * 4.建立錯誤處理
     ********************************************************/
 
-    //建立FETCH請求及實質內容
-
+    //建立FETCH請求及實質內容 
+    // 此句後面不能加分號
+    fetch("https://kktix.com/events.json",{method:"GET"})
 
     //建立回呼函式(call back function)來處理回應時的各項行為
+    .then(
+
+        function(response){
+            // 回傳json格式
+            return response.json();
+        }
+    )
+    .then(
+        function(data){
+            console.log(data);
+            let title = data.title;
+        // 印在網頁上 document.querySelector 獲取檔案中 class=".title" 的元素： 
+        //subsrt(0,10) 抓字串從0到10
+        document.querySelector('.title').innerHTML=title
+        document.querySelector('h4').innerHTML="更新時間"
+        +data.updated.substr(0,10);
+
+        // 將 entry 的資料給 data
+        let dd = data.entry;
+        let str="";
+        // 用foreach 解陣列
+        dd.forEach(function(event,index){ 
+                // 將 event.url 資料變超連結   (index+1)做排序 event.title 當超連結的名稱
+                //  event.content 的資料 字串在連結後
+             str= str +`<li><a href="${event.url}">${(index+1)+'.'+ event.title}</a>-${event.content}<li>`;
+
+        })   
+
+            document.querySelector("ul").innerHTML=str;
+        }
+    )
+    .catch(
+        // 錯誤顯示訊息
+        function(err){
+            console.log(err);
+        }
+    )
 
 
     //建立錯誤處理

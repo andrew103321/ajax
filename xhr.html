@@ -26,12 +26,41 @@
     ********************************************************/
 
     //宣告一個XMLHttpRequest物件
-
+    let xhr =new XMLHttpRequest; 
 
     //建立請求的各項設定及實質內容
-
+    xhr.open("GET","https://kktix.com/events.json",true);
 
     //建立得到回應時的各項設定及行為
+    xhr.onload = function(){
+        // 抓下來的檔案顯示類型   為Content
+        let type = xhr.getResponseHeader("Content-type");
+        let response = xhr.responseText;
+        // parse 解碼json   
+        let res = JSON.parse(response);
+        console.log(res);
+        let title = res.title;
+        // 印在網頁上 document.querySelector 獲取檔案中 class=".title" 的元素： 
+        //subsrt(0,10) 抓字串從0到10
+        document.querySelector('.title').innerHTML=title
+        document.querySelector('h4').innerHTML="更新時間"
+        +res.updated.substr(0,10);
+
+        // 將 entry 的資料給 data
+        let data = res.entry;
+        let str="";
+        // 用foreach 解陣列
+        data.forEach(function(event,index){ 
+                // 將 event.url 資料變超連結   (index+1)做排序 event.title 當超連結的名稱
+                //  event.content 的資料 字串在連結後
+             str= str +`<li><a href="${event.url}">${(index+1)+'.'+ event.title}</a>-${event.content}<li>`;
+
+        })   
+
+            document.querySelector("ul").innerHTML=str;
+    }
+    //請求送出
+    xhr.send();
 
 
     //送出請求
