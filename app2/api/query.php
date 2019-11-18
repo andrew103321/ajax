@@ -1,7 +1,6 @@
 <?php
 //處理查詢資料的請求
-$dsn="mysql:host=localhost;charset=utf8;dbname=ajax";
-$pdo = new PDO($dsn,'root','');
+ include_once "base.php";
 //撈出年一班
 
 $class="1".sprintf("%02d",$_GET["class"]);
@@ -17,6 +16,7 @@ echo "<td>姓名</td>";
 echo "<td>科系</td>";
 echo "<td>生日</td>";
 echo "<td>學號</td>";
+echo "<td>操作</td>";
 echo "</tr>";
 
 
@@ -29,6 +29,11 @@ foreach($rows as $r){
   echo "<td>".$r['dept']."</td>";
   echo "<td>".$r['birthday']."</td>";
   echo "<td>".$r['uni_id']."</td>";
+  echo "<td>";
+  // data-edit data資料命名為edit
+  echo "<button class='edit-user' data-edit='".$r['uni_id']."' >編輯</button>";
+  echo "<button class='del-user'  data-del='".$r['uni_id']."'>刪除</button>";
+  echo "</td>";
   echo "</tr>";
 }
 ?>

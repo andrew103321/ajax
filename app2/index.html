@@ -21,12 +21,37 @@
          border: 1px solid rgb(75, 74, 67);
          padding:5px;
        }
+       #modal{
+         display: none; 
+         width:100%;
+         height: 100vh;
+         background:rgba(200,200,200,0.7);
+         position:absolute;
+         z-index: 90;
+         top:0;
+         left:0;
+       }
+       #delete{
+        background:white;
+        width:300px;
+        height:200px;
+        position:absolute;
+        left:calc(50vw - 150px);
+        top:calc(50vh - 150px);
+        border:1px solid #999;
+        box-shadow: 0 0 5px #ccc;
+        text-align: center;
+        padding:20px;
+      } 
+       #delete .msg{
+         margin: 10px;
+       }
     </style>
  
 </head>
 <body>
   <h1 class="header">學生資料管理系統</h1>
-  <button>新增學生資料</button><br>
+  <button id="addData">新增學生資料</button><br>
   <select name="class" id="class">
     <option value="1">一年一班</option>
     <option value="2">一年二班</option>
@@ -39,6 +64,7 @@
     <option value="9">一年九班</option>
     <option value="10">一年十班</option>
   </select>
+ 
   <table >
     <tr>
       <td>座號</td>
@@ -55,9 +81,16 @@
       <td></td>
     </tr>
   </table>
+  <div id="modal">
+    <div id="delete">
+      <div class="msg">確認刪除嗎?</div>
+      <div id="btns">
+          <button id="delBtn" data-uid="">確認刪除</button>
+          <button id="delCancel">取消</button>
+      </div>
+    </div>
+  </div>
 
-
-  
 </body>
 </html>
 <script>
@@ -68,16 +101,24 @@
 * 4.是否會有回傳值？回傳值的功用及處理？
 * 5.是否需要更新畫面內容？更新畫面的方法？
 ************************************/
-
-
+// 當 #delCancel 被點擊時， 讓 #modal 隱藏
+$("#delCancel").on("click",function(){
+  $("#modal").hide();
+})
 //新增資料的函式
 function create(){
   
 
 }
+$("#delBtn").on("click",function(){
+  // $(this) 為取點擊區域的 
+  let = user = $(this).attr("data-uid");
+  console.log(user)
+  del(user)
+  $("#modal").hide();
+})
 // 呼叫一班
-query('2');
-
+query('1');
 // 將選擇的值給c1
 $("#class").on("change",function(){
   let cl=$(this).val()
@@ -86,9 +127,27 @@ $("#class").on("change",function(){
 
 //查詢資料的函
 function query(cl){
+  // 將"class":cl傳給 query.php 再把結果給 res 印出來
   $.get("./api/query.php",{"class":cl},function(res){
     console.log(res)
     $("table").html(res)
+
+//各項請聽事件
+    $(".del-user").on("click",function(){
+      // $(this) 為取點擊區域的 data-del 中del的值
+      let user = $(this).data('del')
+      console.log(user)
+      // del(user)
+      
+      // attr 強制對標籤加屬性
+      $("#delBtn").attr("data-uid",user)
+   // 原生js  document.getElementById("modal").style.display="block";
+
+   //計算彈出視窗垂直位置
+      $("#modal").show()
+
+      
+    })   
   })
 }
 
@@ -98,8 +157,12 @@ function update(){
 }
 
 //刪除資料的函式
-function del(){
+function del(id){
+  // 傳輸id值給api/delete.php
+  $.post("./api/delete.php",{id},function(res){
+    console.log(res);
 
+  })
 }
 
 </script>
